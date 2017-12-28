@@ -65,14 +65,6 @@ class App extends Component {
   }
 }
 
-//   {list.filter(isSearched(searchTerm)).map(item =>
-//       <div key={item.objectID}>
-        
-          
-//       </div>
-//   )}
-// </div>
-
 class Search extends Component {
   render() {
     const { value, onChange } = this.props;
