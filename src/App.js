@@ -1,24 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 
-const list = [
-  {
-    title: 'React',
-    url: 'https://facebook.github.io/react/',
-    author: 'Mr. Mcdonald',
-    num_comments: 4,
-    points: 33,
-    objectID: 0,
-  },
-  {
-    title: 'Redux',
-    url: 'https://facebook.github.io/reactjs/redux',
-    author: 'Mr. Mcdonald, and Co',
-    num_comments: 2,
-    points: 2,
-    objectID: 1,
-  },
-];
+const DEFAULT_QUERY = 'redux';
+
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
 
 const isSearched = searchTerm => item => item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -74,14 +61,32 @@ class App extends Component {
     super(props);
 
     this.state = {
-      list,
-      searchTerm: '',
+      result: null,
+      searchTerm: DEFAULT_QUERY,
     };
 
+    this.setSearchTopStories = this.setSearchTopStories.bind(this);
+    this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
   }
   
+  setSearchTopStories(result) {
+    this.setState({ result });
+  }
+
+  fetchSearchTopStories(searchTerm) {
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+      .then(response => resonse.json())
+      .then(result => this.setSearchTopStories(result))
+      .catch(e => e);
+  }
+
+  componentDidMount() {
+    const { searchTerm } = this.state;
+    this.fetchSearchTopStories(searchTerm);
+  }
+
   onDismiss(id) {
     const isNotId = item => item.objectID !== id;
     const updatedList = this.state.list.filter(isNotId);
