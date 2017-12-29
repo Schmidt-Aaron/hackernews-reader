@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import fetch from 'isomorphic-fetch';
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_HPP = '100';
@@ -199,5 +200,10 @@ class App extends Component {
   }
 }
 
-
 export default App;
+
+export {
+  Button,
+  Search,
+  Table,
+};
