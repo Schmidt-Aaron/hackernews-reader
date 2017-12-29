@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import renderer from 'react-test-renderer';
-import Enzyme from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import App, { Search, Button, Table } from './App';
 
@@ -45,6 +45,8 @@ describe('Search', () => {
 
 describe('Button', () => {
 
+  const placeholder = undefined;
+
   it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(<Button>Button Time</Button>, div);
@@ -57,6 +59,15 @@ describe('Button', () => {
 
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
+  });
+
+  it('innerHTML checks out', () => {
+    const element = shallow(
+      <Button onClick={placeholder} className="test">
+        Submit
+      </Button>
+    );
+    expect(element.find('.test').text()).toBe('Submit');
   });
 
 });
@@ -82,6 +93,14 @@ describe('Table', () => {
 
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
+  });
+
+  it('shows two items in list', () => {
+    const element = shallow(
+      <Table { ...props } />
+    );
+
+    expect(element.find('.table-row').length).toBe(2)
   });
 
 });
