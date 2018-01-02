@@ -81,7 +81,7 @@ Table.propTypes = {
   onDismiss: PropTypes.func.isRequired,
 };
 
-const Button = ({ onClick, className, children }) =>
+const Button = ({ onClick, className = '', children }) =>
   <button
     onClick={onClick}
     className={className}
@@ -96,12 +96,15 @@ Button.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-Button.defaultProps = {
-  className: '',
-};
-
 const Loading = () =>
   <div>Loading ...</div>
+
+const withLoading = (Component) => ({ isLoading, ...rest}) =>
+  isLoading
+    ? <Loading />
+    : <Component { ...rest } />
+
+const ButtonWithLoading = withLoading(Button);
 
 class App extends Component {
   
@@ -216,8 +219,6 @@ class App extends Component {
       results[searchKey].hits
     ) || [];
 
-    console.log(this.state);
-
     return (
       <div className="page">
         <div className="interactions">
@@ -239,13 +240,11 @@ class App extends Component {
           />
         }
         <div className="interactions">
-          { isLoading
-            ? <Loading />
-            : <Button
+          <ButtonWithLoading
+            isLoading={isLoading}
               onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
               More
-            </Button>
-          }
+            </ButtonWithLoading>
         </div>
       </div>       
     );
